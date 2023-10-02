@@ -1,24 +1,52 @@
 from replit import db
 
+from RdbEX import config
+
+
 # internal functions
-
-def __genpath__(path, key):
-  if  not path.startswith("|"):
-    return "|" + path + key
-  else:
-    return path
+def root(inpath):
+  newpath = inpath
+  if inpath[0] != config.sep:
+    newpath = config.sep + inpath
+  if newpath[len(newpath) - 1] != config.sep:
+    newpath = newpath + config.sep
+  return newpath.split(config.sep)
+# public functions
     
-def create(key, value, path):
-  pathg = __genpath__(path, key)
-  db[str(pathg)] = value
-  return db[str(pathg)]
+def create(key: str, value, path: str = config.sep):
+  inpath = config.sep.join(root(path))
+  db[inpath + key] = value
 
-def delete(key, path):
-  pathg = __genpath__(path, key)
-  if pathg in db:
-    del db[pathg]
-  else:
-    raise FileNotFoundError('No stored key under "' + pathg + '"')
+def delete(key: str, path: str = config.sep):
+  inpath = config.sep.join(root(path))
+  del db[inpath + key]
+  
+def list(path: str = config.sep, removeprefix: bool = True, sortbydirs: bool = False):
+  "list all keys within a path"
+  prefix = config.sep.join(root(path))
+  selected_keys = db.prefix(prefix)
+  result_list = []
+  intermediate=[]
+  for i in selected_keys:
+    if removeprefix:
+      intermediate.append(i.removeprefix(prefix))
+    else:
+      intermediate.append(i)
 
-def list(path):
-  return db.keys()
+  for i in intermediate:
+    if sortbydirs:
+      dirsplit = i.split(config.sep)
+
+      if dirsplit[0] + config.sep not in result_list:
+        result_list.append(dirsplit[0] + config.sep)
+
+    else:
+      result_list.append(i)
+  return result_list
+
+
+def drop(path: str = config.sep):
+  "drop all values within a path"
+  
+  for i in list(path, False):
+    del db[i]
