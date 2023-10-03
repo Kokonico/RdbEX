@@ -3,7 +3,7 @@ import os
 
 from replit import db
 
-from RdbEX import config
+from rdbex import config
 
 # internal variables
 
@@ -12,12 +12,18 @@ methods = [
   "SECRET"
 ]
 
+protected_header = ">>" # not to be used by normal people
 
-ban = ["#", " ", "[", "]", "{", "}", "(", ")", config.sep] + config.banned_characters
+ban = ["#", " ", "[", "]", "{", "}", "(", ")", ">", "<", config.sep] + config.banned_characters
 
 msg = config.msg + "#"
 
 # internal functions
+def check_protection(keyname):
+  if keyname[0:2] == protected_header:
+    raise KeyError("Key is protected!")
+  return False
+
 def splice_msg(path):
   splitted = path.split("#")
   return splitted[len(splitted) - 1]
@@ -25,7 +31,7 @@ def splice_msg(path):
 def valcheck(value):
   for i in value:
     if i in ban:
-      raise ValueError("character not allowed: " + i)
+      raise KeyError("character not allowed: " + i)
   return False
 
 def root(inpath):
