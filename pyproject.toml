@@ -19,4 +19,3 @@ ignore = [ "W291", "W292", "W293",]
 [tool.poetry.dependencies]
 python = ">=3.10.0,<3.11"
 replit = "3.3.2"
-toml = "0.10.2"
