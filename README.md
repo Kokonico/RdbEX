@@ -34,3 +34,5 @@ and to drop your database (with an optional path), use <code> RdbEX.drop("folder
 keep in mind that by default, "|" is the spacing character for folders, this can be changed in RdbEX -> config.py
 
 (please note that this is not full documentation, and it will be coming soon.)
+
+(keep in mind converting databases is currently not implemented, but might happen in the future.)
