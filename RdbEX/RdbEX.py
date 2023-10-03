@@ -9,8 +9,7 @@ from RdbEX import config
 
 methods = [
   "FROM",
-  "SECRET",
-  "FILE"
+  "SECRET"
 ]
 
 
@@ -40,12 +39,14 @@ def root(inpath):
 # public functions
     
 def create(key: str, value, path: str = config.sep):
+  """create a new key under the specified path."""
   valcheck(key)
   valcheck(root(path))
   inpath = msg + config.sep.join(root(path))
   db[inpath + key] = value
 
 def delete(key: str, path: str = config.sep):
+  """delete an existing key under the specified path."""
   valcheck(key)
   valcheck(root(path))
   inpath = msg + config.sep.join(root(path))
@@ -82,7 +83,8 @@ def drop(path: str = config.sep):
   for i in list(path, False):
     del db[i]
 
-def reference(method, input):
+def reference(method: str, input):
+  """generate a reference string under a specified method"""
   mu = method.upper()
   ref = ""
   header = config.ref + mu + " "
