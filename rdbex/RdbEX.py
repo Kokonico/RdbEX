@@ -36,7 +36,7 @@ def valcheck(value):
 
 def root(inpath):
   newpath = splice_msg(inpath)
-  if inpath[0] != config.sep:
+  if newpath[0] != config.sep:
     newpath = config.sep + inpath
   if newpath[len(newpath) - 1] != config.sep:
     newpath = newpath + config.sep
@@ -44,8 +44,8 @@ def root(inpath):
   
 # public functions
     
-def create(key: str, value, path: str = config.sep):
-  """create a new key under the specified path."""
+def set(key: str, value, path: str = config.sep):
+  """create or set a key under the specified path."""
   valcheck(key)
   valcheck(root(path))
   inpath = msg + config.sep.join(root(path))
@@ -89,19 +89,21 @@ def drop(path: str = config.sep):
   for i in list(path, False):
     del db[i]
 
-def reference(method: str, input):
-  """generate a reference string under a specified method"""
+def reference(method: str, input, path: str = config.sep):
+  """generate a reference string under a specified method,
+  one or two inputs may be required"""
   mu = method.upper()
   ref = ""
   header = config.ref + mu + " "
   if mu not in methods:
     raise ValueError("bad method")
   if mu == "FROM":
-    ref = header + config.sep.join(root(input))[:-1]
-  
+    ref = header + config.sep.join(root(path)) + " " + input
   elif mu == "SECRET":
     ref = header + input
   return ref
+
+
 def read(key: str, path: str = config.sep):
     inpath = config.sep.join(root(path))
     value = db[msg + inpath + key]
@@ -110,8 +112,8 @@ def read(key: str, path: str = config.sep):
             value = value[3:]
             cmd = value.split()[0]
             if cmd == "FROM":
-                vpath = config.sep.join(value.split(config.sep)[:-1]).split()[1]
-                vkey = value.split(config.sep)[-1]
+                vpath = value.split()[1]
+                vkey = value.split()[2]
                 return read(vkey, vpath)
             elif cmd == "SECRET":
               return os.environ[value.split()[-1]]

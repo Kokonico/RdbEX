@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "RdbEX"
-version = "0.1.1"
+version = "0.1.2"
 description = "Replit DataBase EXtended"
 authors = [ "Kokonico <kokonico@duck.com>",]
 readme = "README.md"
@@ -19,4 +19,4 @@ ignore = [ "W291", "W292", "W293",]
 
 [tool.poetry.dependencies]
 python = ">=3.10.0,<3.11"
-replit = "3.3.2"
+replit = ">=3.3.2,<4.0.0"
