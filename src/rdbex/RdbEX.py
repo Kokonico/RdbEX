@@ -33,7 +33,7 @@ def db_list(path: str = config["sep"], sortbydirs: bool = False, removeprefix: b
     if removeprefix:
       intermediate.append(i.removeprefix(msg + prefix))
     else:
-      intermediate.append(i)
+      intermediate.append(i.removeprefix(msg))
 
   for i in intermediate:
     if sortbydirs:
@@ -54,7 +54,7 @@ def drop(path: str = config["sep"]):
   valcheck(root(path))
   
   for i in db_list(path, False, False):
-    del db[i]
+    del db[msg + i]
 
 def reference(method: str, input, path: str = config["sep"]):
   """generate a reference string under a specified method,

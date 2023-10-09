@@ -9,7 +9,7 @@ from replit import db
 from . import recovery
 from .__internal import _recovery
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 try:
     from . import utils
