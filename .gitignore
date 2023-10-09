@@ -5,3 +5,5 @@ main.py
 .pythonlibs
 .replit
 **.nix
+**.log
+**.breakpoints
