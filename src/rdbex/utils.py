@@ -1,5 +1,6 @@
 """utilites for RdbEX, to be used for interacting with the db."""
 
+from packaging import version
 from replit import db
 
 from rdbex import __version__
@@ -30,27 +31,32 @@ def key_exists(key: str, path: str = config["sep"]):
 
 def repair():
   """attempts to repair the rdbex metadata. is non-destructive."""
-  new_config = _var.config
-  new_meta = _var.meta
-  
-  if not key_exists(_var.protected_header + "rdbexmeta"):
+
+  try:
+    new_meta = _var.meta
+    new_config = _var.config
+  except KeyError:
     db[_var.protected_header + "rdbexmeta"] = {
         "config": _var.config_def,
         "version": __version__
     }
-
   
-  else:
-    for key in _var.config_def:
-      if key not in _var.config:
-        new_config[key] = _var.config_def[key]
-    new_meta["config"] = new_config
+  new_meta = _var.meta
+  new_config = _var.config
+    
+  for key in _var.config_def:
+    if key not in _var.config:
+      new_config[key] = _var.config_def[key]
+  new_meta["config"] = new_config
 
-    if __version__ != _var.meta["version"]:
-      new_meta["version"] = __version__
-      db[_var.protected_header + "rdbexmeta"] = new_meta
+  package_ver = version.parse(__version__)
+  db_ver = version.parse(_var.meta["version"])
+
+  if package_ver != db_ver:
+    new_meta["version"] = str(package_ver)
 
   db[_var.protected_header + "rdbexmeta"] = new_meta
+
 
 
 def configure(option, value):

@@ -14,7 +14,7 @@ def rebuild():
 
 
 
-def repair():
+def repair(show_success: bool = True):
   """attempt to repair RdbEX without metadata loss."""
 
   meta = {}
@@ -25,17 +25,18 @@ def repair():
     meta = db[_recovery.protected_header + "rdbexmeta"]
     
   # engage repair
-  if "config" in meta.keys(): # repair version
+  if "config" in meta:
     for i in _recovery.config_def:
       if i not in meta["config"]:
         meta["config"][i] = _recovery.config_def[i]
   else:
     meta["config"] = _recovery.config_def
 
-  if "version" not in meta.keys():
-    meta["version"] = "0.0.0"
+  if "version" not in meta:
+    meta["version"] = "0.0.0" # repair version
 
   # push repaired result
 
   db[_recovery.protected_header + "rdbexmeta"] = meta
-  print("repair completed successfully. please reload RdbEX.")
+  if show_success:
+    print("repair completed successfully. please reload RdbEX.")
