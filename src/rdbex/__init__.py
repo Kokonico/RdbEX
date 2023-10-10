@@ -9,7 +9,7 @@ from replit import db
 from . import recovery
 from .__internal import _recovery
 
-__version__ = "0.2.2"
+__version__ = "0.2.3"
 
 try:
     from . import utils
@@ -23,6 +23,6 @@ except KeyError:
     if the error persists, use "from rdbex import recovery" 
     and run recovery.rebuild() to attempt to fix the issue"""
                      ) from None
-except FileNotFoundError:
+except ImportError:
     raise ImportError("""The package has been installed incorrectly and/or has been corrupted. 
     please reinstall the package.""")  from FileNotFoundError

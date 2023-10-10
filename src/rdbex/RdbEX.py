@@ -8,7 +8,7 @@ from rdbex import utils
 from .__internal._func import check_protection, db_grab, root, splice_msg, valcheck
 from .__internal._var import ban, config, methods, msg, protected_header
   
-    
+
 def set(key: str, value, path: str = config["sep"]):
   """create or set a key under the specified path."""
   valcheck(key)

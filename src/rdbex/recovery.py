@@ -4,13 +4,14 @@ from replit import db
 from .__internal import _recovery
 
 
-def rebuild():
+def rebuild(show_success: bool = True):
   """completely rebuild the rdbex metadata, will delete all config data."""
   db[_recovery.protected_header + "rdbexmeta"] = {
     "config": _recovery.config_def,
     "version": "0.0.0"
   }
-  print("rebuild complete. please reload RdbEX.")
+  if show_success:
+    print("rebuild complete. please reload RdbEX.")
 
 
 
@@ -21,7 +22,7 @@ def repair(show_success: bool = True):
   try:
     meta = db[_recovery.protected_header + "rdbexmeta"]
   except KeyError:
-    rebuild()
+    rebuild(False)
     meta = db[_recovery.protected_header + "rdbexmeta"]
     
   # engage repair
