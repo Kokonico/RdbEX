@@ -17,7 +17,26 @@ jobs:
       - name: Setup Poetry
         uses: Gr1N/setup-poetry@v8
 
-      - name: Build and Publish
+      - name: Check pypi versions
+        uses: maybe-hello-world/pyproject-check-version@v3
+        id: versioncheck
+        with:
+          pyproject-path: "./pyproject.toml"    # default value
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Test Import
+        run: python -c "import rdbex"  # replace with your package name
+
+      - name: Build
         run: |
-          poetry build
-          poetry publish --username __token__ --password ${{ secrets.PYPI_API }}
+          if [[ "${{ steps.versioncheck.outputs.local_version_is_higher }}" == "true" ]]; then
+            poetry build
+          fi
+
+      - name: Publish
+        run: |
+          if [[ "${{ steps.versioncheck.outputs.local_version_is_higher }}" == "true" ]]; then
+            poetry publish --username __token__ --password ${{ secrets.PYPI_API }}
+          fi
