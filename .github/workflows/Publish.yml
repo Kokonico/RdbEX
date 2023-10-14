@@ -21,11 +21,8 @@ jobs:
         id: version
         run: echo "::set-output name=version::$(poetry version --short)"
 
-      - name: Install dependencies
-        run: poetry install
-
       - name: Test Import
-        run: python -c "import sys; sys.path.insert(0, './src'); import rdbex"
+        run: poetry install
 
       - name: Build
         run: |
