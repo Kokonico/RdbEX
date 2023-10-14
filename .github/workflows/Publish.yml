@@ -25,7 +25,10 @@ jobs:
         run: poetry install
 
       - name: Test Import
-        run: python -c "import rdbex"  # replace with your package name
+        run: |
+          import sys
+          sys.path.insert(0, './src')
+          python -c "import rdbex"
 
       - name: Build
         run: |
