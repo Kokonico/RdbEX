@@ -17,11 +17,9 @@ jobs:
       - name: Setup Poetry
         uses: Gr1N/setup-poetry@v8
 
-      - name: Check pypi versions
-        uses: maybe-hello-world/pyproject-check-version@v3
-        id: versioncheck
-        with:
-          pyproject-path: "./pyproject.toml"    # default value
+      - name: Get current version
+        id: version
+        run: echo "::set-output name=version::$(poetry version --short)"
 
       - name: Install dependencies
         run: poetry install
@@ -31,12 +29,12 @@ jobs:
 
       - name: Build
         run: |
-          if [[ "${{ steps.versioncheck.outputs.local_version_is_higher }}" == "true" ]]; then
+          if [[ "${{ steps.version.outputs.version }}" != "${{ github.event.after }}" ]]; then
             poetry build
           fi
 
       - name: Publish
         run: |
-          if [[ "${{ steps.versioncheck.outputs.local_version_is_higher }}" == "true" ]]; then
+          if [[ "${{ steps.version.outputs.version }}" != "${{ github.event.after }}" ]]; then
             poetry publish --username __token__ --password ${{ secrets.PYPI_API }}
           fi
