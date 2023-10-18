@@ -9,20 +9,24 @@ from replit import db
 from . import recovery
 from .__internal import _recovery
 
-__version__ = "0.2.5"
+__version__ = "0.2.6"
 
 try:
     from . import utils
     from .__internal import _var
     from .RdbEX import db_list, delete, drop, read, reference, set
+
     utils.repair()
 except KeyError:
     recovery.repair(False)
-    raise ImportError("""critical damage to rdbex detected. 
+    raise ImportError(
+        """critical damage to rdbex detected. 
     a repair has been ran, please restart.
     if the error persists, use "from rdbex import recovery" 
     and run recovery.rebuild() to attempt to fix the issue"""
-                     ) from None
+    ) from None
 except ImportError:
-    raise ImportError("""The package has been installed incorrectly and/or has been corrupted. 
-    please reinstall the package.""")  from FileNotFoundError
+    raise ImportError(
+        """The package has been installed incorrectly and/or has been corrupted. 
+    please reinstall the package."""
+    ) from FileNotFoundError
