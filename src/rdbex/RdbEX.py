@@ -72,6 +72,7 @@ def reference(method: str, input, path: str = config["sep"]):
 
 
 def read(key: str, path: str = config["sep"]):
+        """read a value stored within the db. automatically handles references."""
         inpath = config["sep"].join(root(path))
         value = db_grab(msg + inpath + key)
         if utils.is_reference(value):

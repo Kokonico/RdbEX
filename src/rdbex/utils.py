@@ -60,6 +60,7 @@ def repair():
 
 
 def configure(option, value):
+  """configure RdbEX."""
   new_config = _var.config
   new_meta = _var.meta
   if option in _var.config_def:
