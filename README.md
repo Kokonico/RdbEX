@@ -1,5 +1,6 @@
 # RdbEX
 ## Replit DataBase EXtended
+>0.2.x
 
 Replit database extended is a package designed to expand the abilities of the default replit database.
 
