@@ -14,17 +14,22 @@ __version__ = "0.2.6"
 try:
     from . import utils
     from .__internal import _var
-    from .RdbEX import db_list, delete, drop, read, reference, set
+    from .RdbEX import DBcontroller
 
     utils.repair()
-except KeyError:
+except KeyError as e:
     recovery.repair(False)
-    raise ImportError(
-        """critical damage to rdbex detected. 
-    a repair has been ran, please restart.
-    if the error persists, use "from rdbex import recovery" 
-    and run recovery.rebuild() to attempt to fix the issue"""
-    ) from None
+    # check if it's whining about the metadata key
+    if e.args[0] == '>>rdbexmeta':
+        print("RdbEX Metadata Key Missing. creating...")
+        recovery.repair(False)
+    else:
+        raise ImportError(
+            """critical damage to rdbex detected. 
+        a repair has been ran, please restart.
+        if the error persists, use "from rdbex import recovery" 
+        and run recovery.rebuild() to attempt to fix the issue"""
+        ) from KeyError
 except ImportError:
     raise ImportError(
         """The package has been installed incorrectly and/or has been corrupted. 
