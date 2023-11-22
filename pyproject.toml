@@ -18,7 +18,7 @@ select = [ "E", "W", "F", "I", "B", "C4", "ARG", "SIM",]
 ignore = [ "W291", "W292", "W293",]
 
 [tool.poetry.dependencies]
-python = ">=3.9"
+python = ">=3.9,<4.0"
 
 replit = "^3.3.2"
 packaging = "^23.2"
